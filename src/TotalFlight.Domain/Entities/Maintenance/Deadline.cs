@@ -12,17 +12,24 @@ namespace TotalFlight.Domain.Entities
         public string Title { get; set; }
         public bool TracksTarget { get; set; }
         public bool TracksDate { get; set; }
+        public bool IsRecurring { get; set; }
+        public bool AutoGround { get; set; }
         public MeterTarget Target { get; set; }
+        public decimal? TargetLastCompl { get; set; }
         public decimal TargetInit { get; set; }
-        public decimal TargetInterval { get; set; }
+        public decimal? TargetInterval { get; set; }
         public decimal TargetCurr { get; set; }
+        public DateTime? DateLastCompl { get; set; }
         public DateTime DateInit { get; set; }
-        public DateTime DateIntervalInDays { get; set; }
-        public decimal RemainingTarget { get; set; }
-        public int RemainingDays { get; set; }
-        public decimal OverdueTarget { get; set; }
-        public int OverdueInDays { get; set; }
-        public bool IsOverdue { get; set; }
+        public int? DateIntervalInDays { get; set; }
+        public decimal WarningTgtThresh { get; set; }
+        public int WarningDateThreshInDays { get; set; }
         public bool IsWarning { get; set; }
+        public bool IsOverdue { get; set; }
+        public bool IsClosed { get; set; }
+        public decimal? TgtAmtRemaining { get; set; }
+        public int? DaysRemaining { get; set; }
+        public decimal TgtAmtOverdue { get; set; }
+        public int DaysOverdue { get; set; }
     }
 }
