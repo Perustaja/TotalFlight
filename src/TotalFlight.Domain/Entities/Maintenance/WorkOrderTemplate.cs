@@ -1,6 +1,6 @@
 using System;
 
-namespace Entities
+namespace TotalFlight.Domain.Entities
 {
     public class WorkOrderTemplate
     {

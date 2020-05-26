@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using TotalFlight.Domain.Enums;
 
-namespace Entities
+namespace TotalFlight.Domain.Entities
 {
     public class AircraftTimes 
     {
@@ -20,5 +21,8 @@ namespace Entities
         public decimal? Airtime { get; set; }
         public bool HasElectricalHobbs { get; set; }
         public bool HasTach { get; set; }
+        public bool TrackAirtime { get; set; }
+        public bool TrackCycles { get; set; }
+        public MeterTarget AircraftTotalTgt { get; set; }
     }
 }

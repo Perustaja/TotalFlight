@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Entities
+namespace TotalFlight.Domain.Entities
 {
     /// <summary>
     /// Join table for Discrepancy and Part

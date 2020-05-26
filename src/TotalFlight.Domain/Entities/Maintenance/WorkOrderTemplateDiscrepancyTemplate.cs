@@ -1,6 +1,6 @@
 using System;
 
-namespace Entities
+namespace TotalFlight.Domain.Entities
 {
     /// <summary>
     /// Join table for WorkOrderTemplate and DiscrepancyTemplate
