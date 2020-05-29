@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using TotalFlight.Domain.Enums;
 
 namespace TotalFlight.Domain.Entities.AircraftAggregate
@@ -39,16 +40,14 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         /// <summary>
         /// Returns the valid targets that aircraft total time may track based on current options.
         /// </summary>
-        public List<AircraftTotalTarget> ValidAircraftTotalTgts()
+        public ReadOnlyCollection<AircraftTotalTarget> ValidAircraftTotalTgts()
         {
             var t = new List<AircraftTotalTarget>() { AircraftTotalTarget.Engine1Current };
-            if (IsTwin)
-                t.Add(AircraftTotalTarget.Engine2Current);
             if (HasElecHobbs)
                 t.Add(AircraftTotalTarget.ElecHobbs);
             if (TracksAirtime)
                 t.Add(AircraftTotalTarget.Airtime);
-            return t;
+            return t.AsReadOnly();
         }
     }
 }

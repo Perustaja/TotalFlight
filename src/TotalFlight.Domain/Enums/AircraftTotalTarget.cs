@@ -5,9 +5,8 @@ namespace TotalFlight.Domain.Enums
     /// </summary>
     public enum AircraftTotalTarget
     {
-        Engine1Current = 0,
-        Engine2Current = 1,
-        Airtime = 2,
-        ElecHobbs = 3,
+        Airtime = 0,
+        ElecHobbs = 1,
+        Engine1Current = 2,
     }
 }

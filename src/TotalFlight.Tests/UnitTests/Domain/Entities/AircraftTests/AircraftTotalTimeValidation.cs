@@ -13,7 +13,6 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
         [Theory]
         [InlineData(AircraftTotalTarget.Airtime)]
         [InlineData(AircraftTotalTarget.ElecHobbs)]
-        [InlineData(AircraftTotalTarget.Engine2Current)]
         public void Throws_On_Invalid_Target(AircraftTotalTarget invalidTgt)
         {
             // Create barebones single-engine AircraftOptions

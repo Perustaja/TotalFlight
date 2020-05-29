@@ -6,11 +6,10 @@ its own with navigational properties. The large constructors in Aircraft, while 
 are based on the fact that an Aircraft has a very strict necessity for a lot of data. The payoff 
 should be a much easier to understand usage of entities when it comes to writes.
 ### Aircraft Aggregate
-Aircraft should be created with the same constructor, using nullable data passed in as JSON. Aircraft
-handles meter targeting and options validation internally. Nullable data may be passed in with values
-if the setting is set to false (e.g. a value is sent for Airtime when TracksAirtime is false), it
-will simply be ignored. However, if null data is sent in when it must be tracked, an exception will
-be thrown. 
+Aircraft should be created with the same constructor, using nullable data passed in as JSON. Nullable 
+data will be checked so the AircraftOptions must change the front-end form dynamically, sending
+data that should be null with values or vice versa will result in an error. Navigational properties
+may be accessed for reading but have an access mod of protected.
 ## Exceptions
 Entity exceptions should not be encountered normally. These should only be thrown if someone modifies
 a front-end form maliciously or a development error is created on the front-end.

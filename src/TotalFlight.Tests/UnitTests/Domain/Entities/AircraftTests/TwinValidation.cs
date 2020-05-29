@@ -18,11 +18,11 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
             var opts = new AircraftOptions(false, false, false, false, true, false);
 
             // Check all possible twin engine arguments
-            Assert.Throws<NullTimesException>(() => new Aircraft("", "", 0, 0, 0m, 0m, null,
+            Assert.Throws<InvalidTimesException>(() => new Aircraft("", "", 0, 0, 0m, 0m, null,
             0m, 0m, 0m, 0m, 0m, 0m, 0m, 0, AircraftTotalTarget.Engine1Current, opts));
-            Assert.Throws<NullTimesException>(() => new Aircraft("", "", 0, 0, 0m, 0m, 0m,
+            Assert.Throws<InvalidTimesException>(() => new Aircraft("", "", 0, 0, 0m, 0m, 0m,
             null, 0m, 0m, 0m, 0m, 0m, 0m, 0, AircraftTotalTarget.Engine1Current, opts));
-            Assert.Throws<NullTimesException>(() => new Aircraft("", "", 0, 0, 0m, 0m, 0m,
+            Assert.Throws<InvalidTimesException>(() => new Aircraft("", "", 0, 0, 0m, 0m, 0m,
             0m, 0m, null, 0m, 0m, 0m, 0m, 0, AircraftTotalTarget.Engine1Current, opts));
         }
     }
