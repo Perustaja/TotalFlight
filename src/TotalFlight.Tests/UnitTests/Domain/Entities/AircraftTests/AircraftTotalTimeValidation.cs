@@ -18,11 +18,12 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
             // Create barebones single-engine AircraftOptions
             // IMPORTANT - Engine1Current is always a valid target.
             var opts = new AircraftOptions(false, false, false, false, false, false);
+            var times = new AircraftTimes("", 0m, 0m, 0m, 0m, null, null, null, null, 
+            invalidTgt);
 
-            // Create an aircraft that does not ever have Airtime, ElecHobbs, or Engine2Current data
+            // Create an aircraft that does not ever have Airtime or ElecHobbs data
             // while also passing in targets pointing to those properties.
-            Assert.Throws<InvalidTargetException>(() => new Aircraft("", "", 0, 0, 0, 0, null, 0m,
-            0m, 0m, 0m, null, null, null, 0, invalidTgt, opts));
+            Assert.Throws<InvalidTargetException>(() => new Aircraft("", "", 0, 0, times, opts));
         }
     }
 }

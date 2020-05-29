@@ -21,7 +21,8 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public decimal? AirtimeTotal { get; private set; }
         public AircraftTotalTarget AircraftTotalTgt { get; private set; }
         /// <summary>
-        /// Creates an initial single-engine or simulator time record.
+        /// Creates an initial single-engine or simulator time record. Use SetTwinTimes afterwards
+        /// if creating a twin aircraft.
         /// </summary>
         public AircraftTimes(string aircraftId, decimal eng1Curr, decimal eng1Total, decimal prop1Total,
         decimal acTotal, decimal? elecHobbs, decimal? airtimeCurr, decimal? airtimeTotal, 
@@ -38,7 +39,10 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
             AirtimeTotal = airtimeTotal;
             Cycles = cycles;
         }
-        public void SetTwinTimes(decimal eng2Curr, decimal eng2Total, decimal prop2Total)
+        /// <summary>
+        /// Sets twin times, use after constructor if creating a twin aircraft.
+        /// </summary>
+        public void SetTwinTimes(decimal? eng2Curr, decimal? eng2Total, decimal? prop2Total)
         {
             Engine2Current = eng2Curr;
             Engine2Total = eng2Total;
@@ -92,7 +96,14 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         /// </summary>
         public void UpdateTwinTimes(decimal eng2Curr)
         {
-            Engine2Current = eng2Curr;
+            var change = eng2Curr - Engine2Current;
+            if (change >= 0) {
+                Engine2Current = eng2Curr;
+                Engine2Total += change;
+                Prop2Total += change;
+            } else {
+                throw new InvalidTimesException(AircraftId, "eng2Curr param less than current value.");
+            }
         }
     }
 }
