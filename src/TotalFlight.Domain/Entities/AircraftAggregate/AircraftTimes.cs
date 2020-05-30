@@ -87,7 +87,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
                     throw new TimesUpdateException(AircraftId, "elecHobbs param less than current value.");
                 }
             }
-            Cycles = cycles.HasValue && cycles - Cycles >= 0 
+            Cycles = cycles.HasValue && cycles - Cycles > 0 
                 ? cycles.Value : throw new TimesUpdateException(AircraftId, "cycles param less than current value.");
         }
         /// <summary>

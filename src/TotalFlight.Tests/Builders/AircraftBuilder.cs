@@ -10,10 +10,14 @@ namespace TotalFlight.Tests.Builders
         /// </summary>
         public static Aircraft ZeroTimeTwin(AircraftTotalTarget tgt)
         {
-            var opts = new AircraftOptions(true, true, true, false, true, false);
+            var opts = AllMeterTwinOptions();
             var times = new AircraftTimes("", 0, 0, 0, 0, 0m, 0m, 0m, 0, tgt);
             times.SetTwinTimes(0m, 0m, 0m);
             return new Aircraft("", "", 0, 0, times, opts);
+        }
+        public static AircraftOptions AllMeterTwinOptions()
+        {
+            return new AircraftOptions(true, true, true, false, true, false);
         }
     }
 }
