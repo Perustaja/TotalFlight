@@ -1,6 +1,6 @@
 using TotalFlight.Domain.Entities.AircraftAggregate;
 using TotalFlight.Domain.Enums;
-using TotalFlight.Domain.Exceptions;
+using TotalFlight.Domain.Exceptions.Aircraft;
 using TotalFlight.Tests.Builders;
 using Xunit;
 
@@ -45,9 +45,9 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
             var ac = AircraftBuilder.ZeroTimeTwin(AircraftTotalTarget.Engine1Current);
             var opts = AircraftBuilder.AllMeterTwinOptions();
 
-            var times = new AircraftTimes("", 1m, 1m, 1m, 1m, 1m, 1m, 1m, 1, AircraftTotalTarget.Engine1Current);
+            var times = new AircraftTimes(1m, 1m, 1m, 1m, 1m, 1m, 1m, 1, AircraftTotalTarget.Engine1Current);
             times.SetTwinTimes(0m, 0m, 0m);
-            ac.EditTimes(times, opts);
+            ac.SetConfiguration(times, opts);
 
             // Create a shifting array of times to assign, each one setting a single times
             // value to 1 so we can test all possible times we send in lesser data. 

@@ -1,6 +1,6 @@
 using TotalFlight.Domain.Entities.AircraftAggregate;
 using TotalFlight.Domain.Enums;
-using TotalFlight.Domain.Exceptions;
+using TotalFlight.Domain.Exceptions.Shared;
 using Xunit;
 
 namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
@@ -18,7 +18,7 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
             // Create barebones single-engine AircraftOptions
             // IMPORTANT - Engine1Current is always a valid target.
             var opts = new AircraftOptions(false, false, false, false, false, false);
-            var times = new AircraftTimes("", 0m, 0m, 0m, 0m, null, null, null, null, 
+            var times = new AircraftTimes(0m, 0m, 0m, 0m, null, null, null, null, 
             invalidTgt);
 
             // Create an aircraft that does not ever have Airtime or ElecHobbs data

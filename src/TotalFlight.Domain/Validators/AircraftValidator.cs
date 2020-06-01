@@ -1,7 +1,8 @@
 using System;
 using TotalFlight.Domain.Entities.AircraftAggregate;
 using TotalFlight.Domain.Enums;
-using TotalFlight.Domain.Exceptions;
+using TotalFlight.Domain.Exceptions.Aircraft;
+using TotalFlight.Domain.Exceptions.Shared;
 
 namespace TotalFlight.Domain.Validators
 {
@@ -16,14 +17,14 @@ namespace TotalFlight.Domain.Validators
             var src = String.Empty;
             if ((opts.TracksAirtime && !airtimeCurr.HasValue) 
                 || (!opts.TracksAirtime && airtimeCurr.HasValue))
-                src = "airtimeCurr";
+                src = nameof(airtimeCurr);
             if ((opts.TracksAirtime && !airtimeTotal.HasValue) 
                 || (!opts.TracksAirtime && airtimeTotal.HasValue))
-                src = "airtimeTotal";
+                src = nameof(airtimeTotal);
             if ((opts.HasElecHobbs && !elecHobbs.HasValue) || (!opts.HasElecHobbs && elecHobbs.HasValue))
-                src = "elecHobbs";
+                src = nameof(elecHobbs);
             if ((opts.TracksCycles && !cycles.HasValue) || (!opts.TracksCycles && cycles.HasValue))
-                src = "cycles";
+                src = nameof(cycles);
             if (!String.IsNullOrEmpty(src))
                 throw new InvalidTimesException(id, src);
         }
@@ -36,11 +37,11 @@ namespace TotalFlight.Domain.Validators
             var src = String.Empty;
             if ((opts.TracksAirtime && !airtimeCurr.HasValue) 
                 || (!opts.TracksAirtime && airtimeCurr.HasValue))
-                src = "airtimeCurr";
+                src = nameof(airtimeCurr);
             if ((opts.HasElecHobbs && !elecHobbs.HasValue) || (!opts.HasElecHobbs && elecHobbs.HasValue))
-                src = "elecHobbs";
+                src = nameof(elecHobbs);
             if ((opts.TracksCycles && !cycles.HasValue) || (!opts.TracksCycles && cycles.HasValue))
-                src = "cycles";
+                src = nameof(cycles);
             if (!String.IsNullOrEmpty(src))
                 throw new InvalidTimesException(id, src);
         }
@@ -53,11 +54,11 @@ namespace TotalFlight.Domain.Validators
             var src = String.Empty;
             if (opts.IsTwin) {
                 if (!eng2Curr.HasValue)
-                    src = "eng2Curr";
+                    src = nameof(eng2Curr);
                 if (!eng2Total.HasValue)
-                    src = "eng2Total";
+                    src = nameof(eng2Total);
                 if (!prop2Total.HasValue)
-                    src = "prop2Total";
+                    src = nameof(prop2Total);
                 if (!String.IsNullOrEmpty(src))
                     throw new InvalidTimesException(id, src);
             }
@@ -70,7 +71,7 @@ namespace TotalFlight.Domain.Validators
             var src = String.Empty;
             if (opts.IsTwin) {
                 if (!eng2Curr.HasValue)
-                    throw new InvalidTimesException(id, "eng2Curr");
+                    throw new InvalidTimesException(id, nameof(eng2Curr));
             }
         }
         /// <summary>

@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using TotalFlight.Domain.SharedKernel;
 
 namespace TotalFlight.Domain.Entities
 {
-    public class Part
+    public class Part : Entity
     {
         public Guid Id { get; set; }
         /// <summary>

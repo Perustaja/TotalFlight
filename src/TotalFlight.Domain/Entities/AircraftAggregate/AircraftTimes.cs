@@ -1,11 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using TotalFlight.Domain.Enums;
-using TotalFlight.Domain.Exceptions;
+using TotalFlight.Domain.Exceptions.Aircraft;
+using TotalFlight.Domain.SharedKernel;
 
 namespace TotalFlight.Domain.Entities.AircraftAggregate
 {
-    public class AircraftTimes
+    public class AircraftTimes : Entity
     {
         public string AircraftId { get; private set; }
         public decimal? ElectricalHobbs { get; private set; }
@@ -24,11 +25,10 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         /// Creates an initial single-engine or simulator time record. Use SetTwinTimes afterwards
         /// if creating a twin aircraft.
         /// </summary>
-        public AircraftTimes(string aircraftId, decimal eng1Curr, decimal eng1Total, decimal prop1Total,
+        public AircraftTimes(decimal eng1Curr, decimal eng1Total, decimal prop1Total,
         decimal acTotal, decimal? elecHobbs, decimal? airtimeCurr, decimal? airtimeTotal, 
         int? cycles, AircraftTotalTarget atTgt)
         {
-            AircraftId = aircraftId;
             Engine1Current = eng1Curr;
             AircraftTotal = acTotal;
             Engine1Total = eng1Total;
@@ -48,6 +48,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
             Engine2Total = eng2Total;
             Prop2Total = prop2Total;
         }
+        public void SetId(string aircraftId) => AircraftId = aircraftId;
         /// <summary>
         /// Updates single-engine or simulator times, ensuring all values result in a positive change.
         /// Updates times and any total times as applicable.
@@ -64,7 +65,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
                 if (AircraftTotalTgt == AircraftTotalTarget.Engine1Current)
                     AircraftTotal += change;
             } else {
-                throw new TimesUpdateException(AircraftId, "eng1Curr param less than current value.");
+                throw new TimesUpdateException(AircraftId, $"{nameof(eng1Curr)} param less than current value.");
             }
             if (airtimeCurr.HasValue) {
                 change = airtimeCurr.Value - AirtimeCurrent.Value;
@@ -74,7 +75,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
                     if (AircraftTotalTgt == AircraftTotalTarget.Airtime)
                         AircraftTotal += change;
                 } else {
-                    throw new TimesUpdateException(AircraftId, "airtimeCurr param less than current value.");
+                    throw new TimesUpdateException(AircraftId, $"{nameof(airtimeCurr)} param less than current value.");
                 }
             }
             if (elecHobbs.HasValue) {
@@ -84,11 +85,11 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
                     if (AircraftTotalTgt == AircraftTotalTarget.ElecHobbs)
                         AircraftTotal += change;
                 } else {
-                    throw new TimesUpdateException(AircraftId, "elecHobbs param less than current value.");
+                    throw new TimesUpdateException(AircraftId, $"{nameof(elecHobbs)} param less than current value.");
                 }
             }
             Cycles = cycles.HasValue && cycles - Cycles > 0 
-                ? cycles.Value : throw new TimesUpdateException(AircraftId, "cycles param less than current value.");
+                ? cycles.Value : throw new TimesUpdateException(AircraftId, $"{nameof(cycles)} param less than current value.");
         }
         /// <summary>
         /// Updates twin times, ensuring all values result in a positive change.
@@ -102,7 +103,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
                 Engine2Total += change;
                 Prop2Total += change;
             } else {
-                throw new InvalidTimesException(AircraftId, "eng2Curr param less than current value.");
+                throw new InvalidTimesException(AircraftId, $"{nameof(eng2Curr)} param less than current value.");
             }
         }
     }

@@ -1,15 +1,16 @@
 # Domain
+## DomainEvents
+TBD
 ## Entities
 Entities follow DDD loosely. Where aggregates are appropriate, the root controls all updating of
-its children. This creates a bit of a god object, however the alternative is each entity working on
-its own with navigational properties. The large constructors in Aircraft, while I won't make excuses,
-are based on the fact that an Aircraft has a very strict necessity for a lot of data. The payoff 
-should be a much easier to understand usage of entities when it comes to writes.
+its children. Aggregates will be kept small and not strictly break encapsulation via "...Child" methods.
+
 ### Aircraft Aggregate
 Aircraft should be created with the same constructor, using nullable data passed in as JSON. Nullable 
 data will be checked so the AircraftOptions must change the front-end form dynamically, sending
 data that should be null with values or vice versa will result in an error. Navigational properties
-may be accessed for reading but have an access mod of protected.
+are accessible but protected.
+
 ## Exceptions
 Entity exceptions should not be encountered normally. These should only be thrown if someone modifies
 a front-end form maliciously or a development error is created on the front-end.

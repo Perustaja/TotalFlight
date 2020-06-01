@@ -1,15 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using TotalFlight.Domain.SharedKernel;
 
 namespace TotalFlight.Domain.Entities
 {
-    public class Discrepancy
+    public class Discrepancy : Entity
     {
         public Guid Id { get; set; }
         public string AircraftId { get; set; }
-        /// <summary>
-        /// The identifier of the squawk addressed by this discrepancy, if applicable.
-        /// /<summary>
         public Guid? SquawkId { get; set; }
         public Guid WorkOrderId { get; set; }
         [StringLength(40)]

@@ -1,11 +1,8 @@
 using System;
 using TotalFlight.Domain.Enums;
 
-namespace TotalFlight.Domain.Exceptions
+namespace TotalFlight.Domain.Exceptions.Shared
 {
-    /// <summary>
-    /// Used when an Aircraft is passed an invalid time argument.
-    /// </summary>
     public class InvalidTargetException : Exception
     {
         public InvalidTargetException(string aircraftId, AircraftTotalTarget tgt)

@@ -1,6 +1,6 @@
 using System;
 
-namespace TotalFlight.Domain.Exceptions
+namespace TotalFlight.Domain.Exceptions.Aircraft
 {
     /// <summary>
     /// Used when there is an error overwriting the current Aircraft time with an incoming value.

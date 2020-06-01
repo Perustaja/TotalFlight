@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TotalFlight.Domain.Enums;
+using TotalFlight.Domain.SharedKernel;
 
 namespace TotalFlight.Domain.Entities.AircraftAggregate
 {
@@ -8,7 +9,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
     /// Represents settings and configuration of an aircraft. Whether the plane is grounded, active,
     /// or soft deleted is regarded as state and instead included in Aircraft.
     /// </summary>
-    public class AircraftOptions
+    public class AircraftOptions : Entity
     {
         public bool HasElecHobbs { get; private set; }
         public bool TracksAirtime { get; private set; }
@@ -40,14 +41,14 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         /// <summary>
         /// Returns the valid targets that aircraft total time may track based on current options.
         /// </summary>
-        public ReadOnlyCollection<AircraftTotalTarget> ValidAircraftTotalTgts()
+        public List<AircraftTotalTarget> ValidAircraftTotalTgts()
         {
             var t = new List<AircraftTotalTarget>() { AircraftTotalTarget.Engine1Current };
             if (HasElecHobbs)
                 t.Add(AircraftTotalTarget.ElecHobbs);
             if (TracksAirtime)
                 t.Add(AircraftTotalTarget.Airtime);
-            return t.AsReadOnly();
+            return t;
         }
     }
 }

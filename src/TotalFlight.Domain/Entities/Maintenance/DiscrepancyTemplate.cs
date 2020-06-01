@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using TotalFlight.Domain.SharedKernel;
 
 namespace TotalFlight.Domain.Entities
 {
-    public class DiscrepancyTemplate
+    public class DiscrepancyTemplate : Entity
     {
         public Guid Id { get; set; }
         [StringLength(40)]

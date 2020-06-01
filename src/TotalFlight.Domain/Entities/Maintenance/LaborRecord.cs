@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using TotalFlight.Domain.SharedKernel;
 
 namespace TotalFlight.Domain.Entities
 {
-    public class LaborRecord
+    public class LaborRecord : Entity
     {
         public Guid Id { get; set; }
         public Guid DiscrepancyId { get; set; }

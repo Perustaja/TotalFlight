@@ -1,6 +1,6 @@
 using System;
 
-namespace TotalFlight.Domain.Exceptions
+namespace TotalFlight.Domain.Exceptions.Aircraft
 {
     /// <summary>
     /// Used when an Aircraft is passed either a null value where it is required or vice-versa.
