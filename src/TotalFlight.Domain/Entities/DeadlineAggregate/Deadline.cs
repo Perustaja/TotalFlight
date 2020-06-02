@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TotalFlight.Domain.Enums;
 using TotalFlight.Domain.Exceptions.Deadline;
 using TotalFlight.Domain.SharedKernel;
 
@@ -93,28 +92,6 @@ namespace TotalFlight.Domain.Entities.DeadlineAggregate
             DateIntervalInDays = dateInt;
             opts.SetId(Id);
             DeadlineOptions = opts;
-            Validate();
-        }
-        public void SetBaseInfo(string aircraftId, string title)
-        {
-            AircraftId = aircraftId;
-            Title = title;
-        }
-        public void SetMeterTgtInfo(decimal? tgtLast, decimal? tgtInit, decimal? tgtInt, 
-        DeadlineOptions opts)
-        {
-            TargetLastCompl = tgtLast;
-            TargetInit = tgtInit;
-            TargetInterval = tgtInt;
-            opts.SetId(Id);
-            DeadlineOptions = opts;
-            Validate();
-        }
-        public void SetDateTgtInfo(DateTime? dateLast, DateTime? dateInit, int? dateInt)
-        {
-            DateLastCompl = dateLast;
-            DateInit = dateInit;
-            DateIntervalInDays = dateInt;
             Validate();
         }
         public void Validate()

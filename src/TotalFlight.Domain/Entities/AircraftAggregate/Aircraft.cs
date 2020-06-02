@@ -34,14 +34,10 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
             IsGrounded = false;
             IsSoftDeleted = false;
             IsActive = false;
-            AircraftValidator.ValidateAircraftTotalTarget(Id, times.AircraftTotalTgt, opts);
-            AircraftValidator.ValidateOptionalTimesEdit(Id, times.AirtimeCurrent, 
-            times.AirtimeTotal, times.ElectricalHobbs, times.Cycles, opts);
-            AircraftValidator.ValidateTwinTimesEdit(Id, times.Engine2Current, times.Engine2Total, 
-            times.Prop2Total, opts);
             times.SetId(id);
             AircraftOptions = opts;
             AircraftTimes = times;
+            this.Validate();
         }
         public void SetDetails(string model, int year, int places)
         {
@@ -51,13 +47,13 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         }
         public void SoftDelete()
         {
-            IsSoftDeleted = IsDispatched ? throw new EditWhileDispatchedException(Id, "SoftDelete")
+            IsSoftDeleted = IsDispatched ? throw new EditWhileDispatchedException(Id, nameof(SoftDelete))
             : true;
         }
         public void Activate() => IsActive = true;
         public void Deactivate()
         {
-            IsActive = IsDispatched ? throw new EditWhileDispatchedException(Id, "Deactivate")
+            IsActive = IsDispatched ? throw new EditWhileDispatchedException(Id, nameof(Deactivate))
             : false;
         }
         public void Ground() => IsGrounded = true;
@@ -75,14 +71,10 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public void SetConfiguration(AircraftTimes times, AircraftOptions opts)
         {
             if (IsDispatched)
-                throw new EditWhileDispatchedException(Id, "EditTimes");
-            AircraftValidator.ValidateAircraftTotalTarget(Id, times.AircraftTotalTgt, opts);
-            AircraftValidator.ValidateOptionalTimesEdit(Id, times.AirtimeCurrent, times.AirtimeTotal, 
-            times.ElectricalHobbs, times.Cycles, opts);
-            AircraftValidator.ValidateTwinTimesEdit(Id, times.Engine2Current, times.Engine2Total, 
-            times.Prop2Total, opts);
+                throw new EditWhileDispatchedException(Id, nameof(SetConfiguration));
             AircraftOptions = opts;
             AircraftTimes = times;
+            this.Validate();
             DomainEvents.Add(new AircraftTimesChangedDomainEvent(AircraftTimes));
         }
         /// <summary>
@@ -93,13 +85,11 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public void UpdateTimes(decimal eng1Curr, decimal? eng2Curr, decimal? elecHobbs, 
         decimal? airtimeCurr, int? cycles)
         {
-            AircraftValidator.ValidateOptionalTimesUpdate(Id, airtimeCurr, elecHobbs, cycles, 
-            AircraftOptions);
             AircraftTimes.UpdateTimes(eng1Curr, eng2Curr, elecHobbs, airtimeCurr, cycles);
             if (AircraftOptions.IsTwin) {
-                AircraftValidator.ValidateTwinTimesUpdate(Id, eng2Curr, AircraftOptions);
                 AircraftTimes.UpdateTwinTimes(eng2Curr.Value);
             }
+            this.Validate();
             DomainEvents.Add(new AircraftTimesChangedDomainEvent(AircraftTimes));
         }
     }

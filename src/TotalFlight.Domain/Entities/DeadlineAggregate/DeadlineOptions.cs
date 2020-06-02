@@ -14,7 +14,9 @@ namespace TotalFlight.Domain.Entities.DeadlineAggregate
         public bool TracksDate { get; private set; }
         public bool IsRecurring { get; private set; }
         public DeadlineTarget? Target { get; private set; }
+        [Range(0, 100)]
         public decimal WarningTgtThresh { get; private set; }
+        [Range(0, 300)]
         public int WarningDateThreshInDays { get; private set; }
         public Deadline Deadline { get; private set; }
         public DeadlineOptions(bool tracksTgt, bool tracksDate, bool isRecurr, DeadlineTarget tgt, 

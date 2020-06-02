@@ -1,9 +1,22 @@
+# General guidelines
+## Entity annotations
+Entities will retain data annotations not for their own use, but to act as a guide for any future DTOs,
+Viewmodels, etc.
+## Tests
+Tests should be targeted and, if simple, be stored in a test proj as {FolderName}/{ClassName}Tests e.g. 
+Domain/PartTests. If the project is complex then many targeted tests may be stored under 
+{FolderName}/{ClassNameTests}/{SubsetArea} e.g. Domain/OrderTests/Shipping or Cancellation.
 # Domain
 ## DomainEvents
 TBD
 ## Entities
 Entities follow DDD loosely. Where aggregates are appropriate, the root controls all updating of
 its children. Aggregates will be kept small and not strictly break encapsulation via "...Child" methods.
+### Entity invariants
+Entities will be checked for validity by performing validation methods after their properties have
+been changed via methods. They may be put in an invalid state before calling a validation method that
+will throw exceptions if anything is not proper. It is expected that, if an exception is thrown, all
+changes to the entity will be reverted (such as EF Core's SaveChanges in a transaction).
 
 ### Aircraft Aggregate
 Aircraft should be created with the same constructor, using nullable data passed in as JSON. Nullable 

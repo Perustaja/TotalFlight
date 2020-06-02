@@ -6,82 +6,71 @@ using TotalFlight.Domain.Exceptions.Shared;
 
 namespace TotalFlight.Domain.Validators
 {
-    public class AircraftValidator
+    public static class AircraftValidator
     {
         /// <summary>
-        /// Ensures that the current values passed in are valid given the AircraftOptions configuration.
+        /// Performs all necessary checking of invariants.
         /// </summary>
-        public static void ValidateOptionalTimesEdit(string id, decimal? airtimeCurr, decimal? airtimeTotal, 
-        decimal? elecHobbs, int? cycles, AircraftOptions opts)
+        public static void Validate(this Aircraft ac)
         {
-            var src = String.Empty;
-            if ((opts.TracksAirtime && !airtimeCurr.HasValue) 
-                || (!opts.TracksAirtime && airtimeCurr.HasValue))
-                src = nameof(airtimeCurr);
-            if ((opts.TracksAirtime && !airtimeTotal.HasValue) 
-                || (!opts.TracksAirtime && airtimeTotal.HasValue))
-                src = nameof(airtimeTotal);
-            if ((opts.HasElecHobbs && !elecHobbs.HasValue) || (!opts.HasElecHobbs && elecHobbs.HasValue))
-                src = nameof(elecHobbs);
-            if ((opts.TracksCycles && !cycles.HasValue) || (!opts.TracksCycles && cycles.HasValue))
-                src = nameof(cycles);
-            if (!String.IsNullOrEmpty(src))
-                throw new InvalidTimesException(id, src);
+            ac.ValidateAircraftTotalTarget();
+            ac.ValidateOptionalTimes();
+            ac.ValidateTwinTimes();
         }
         /// <summary>
         /// Ensures that the current values passed in are valid given the AircraftOptions configuration.
         /// </summary>
-        public static void ValidateOptionalTimesUpdate(string id, decimal? airtimeCurr, decimal? elecHobbs, 
-        int? cycles, AircraftOptions opts)
+        private static void ValidateOptionalTimes(this Aircraft ac)
         {
+            var times = ac.AircraftTimes;
+            var opts = ac.AircraftOptions;
+
             var src = String.Empty;
-            if ((opts.TracksAirtime && !airtimeCurr.HasValue) 
-                || (!opts.TracksAirtime && airtimeCurr.HasValue))
-                src = nameof(airtimeCurr);
-            if ((opts.HasElecHobbs && !elecHobbs.HasValue) || (!opts.HasElecHobbs && elecHobbs.HasValue))
-                src = nameof(elecHobbs);
-            if ((opts.TracksCycles && !cycles.HasValue) || (!opts.TracksCycles && cycles.HasValue))
-                src = nameof(cycles);
+            if ((opts.TracksAirtime && !times.AirtimeCurrent.HasValue) 
+                || (!opts.TracksAirtime && times.AirtimeCurrent.HasValue))
+                src = nameof(times.AirtimeCurrent);
+            if ((opts.TracksAirtime && !times.AirtimeTotal.HasValue) 
+                || (!opts.TracksAirtime && times.AirtimeTotal.HasValue))
+                src = nameof(times.AirtimeTotal);
+            if ((opts.HasElecHobbs && !times.ElectricalHobbs.HasValue) 
+                || (!opts.HasElecHobbs && times.ElectricalHobbs.HasValue))
+                src = nameof(times.ElectricalHobbs);
+            if ((opts.TracksCycles && !times.Cycles.HasValue) 
+                || (!opts.TracksCycles && times.Cycles.HasValue))
+                src = nameof(times.Cycles);
             if (!String.IsNullOrEmpty(src))
-                throw new InvalidTimesException(id, src);
+                throw new InvalidTimesException(ac.Id, src);
         }
         /// <summary>
         /// Ensures that nullable parameters have values given the current AircraftOptions.
         /// </summary>
-        public static void ValidateTwinTimesEdit(string id, decimal? eng2Curr, decimal? eng2Total, decimal? prop2Total, 
-        AircraftOptions opts)
+        private static void ValidateTwinTimes(this Aircraft ac)
         {
+            var opts = ac.AircraftOptions;
+            var times = ac.AircraftTimes;
+
             var src = String.Empty;
             if (opts.IsTwin) {
-                if (!eng2Curr.HasValue)
-                    src = nameof(eng2Curr);
-                if (!eng2Total.HasValue)
-                    src = nameof(eng2Total);
-                if (!prop2Total.HasValue)
-                    src = nameof(prop2Total);
+                if (!times.Engine2Current.HasValue)
+                    src = nameof(times.Engine2Current);
+                if (!times.Engine2Total.HasValue)
+                    src = nameof(times.Engine2Total);
+                if (!times.Prop2Total.HasValue)
+                    src = nameof(times.Prop2Total);
                 if (!String.IsNullOrEmpty(src))
-                    throw new InvalidTimesException(id, src);
-            }
-        }
-        /// <summary>
-        /// Ensures that nullable parameters have values given the current AircraftOptions.
-        /// </summary>
-        public static void ValidateTwinTimesUpdate(string id, decimal? eng2Curr,AircraftOptions opts)
-        {
-            var src = String.Empty;
-            if (opts.IsTwin) {
-                if (!eng2Curr.HasValue)
-                    throw new InvalidTimesException(id, nameof(eng2Curr));
+                    throw new InvalidTimesException(ac.Id, src);
             }
         }
         /// <summary>
         /// Ensures that the AircraftTotalTarget arg is a valid target given the AircraftOptions.
         /// </summary>
-        public static void ValidateAircraftTotalTarget(string id, AircraftTotalTarget tgt,
-        AircraftOptions opts)
+        private static void ValidateAircraftTotalTarget(this Aircraft ac)
         {
-            if (!opts.ValidAircraftTotalTgts().Contains(tgt))
-                throw new InvalidTargetException(id, tgt);
+            var opts = ac.AircraftOptions;
+            var times = ac.AircraftTimes;
+
+            if (!opts.ValidAircraftTotalTgts().Contains(times.AircraftTotalTgt))
+                throw new InvalidTargetException(ac.Id, times.AircraftTotalTgt);
         }
     }
 }
