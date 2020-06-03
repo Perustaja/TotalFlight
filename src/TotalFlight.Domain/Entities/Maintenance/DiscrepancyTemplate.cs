@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TotalFlight.Domain.SharedKernel;
 
@@ -13,6 +14,8 @@ namespace TotalFlight.Domain.Entities
         public string Description { get; set; }
         [StringLength(600)]
         public string Resolution { get; set; }
-
+        public List<DiscrepancyTemplatePart> DiscrepancyTemplateParts { get; set; }
+        // Required for join table
+        public List<WorkOrderTemplateDiscrepancyTemplate> WorkOrderTemplateDiscrepancyTemplates { get; set; }
     }
 }

@@ -12,5 +12,7 @@ namespace TotalFlight.Domain.Entities
         public Guid PartId { get; set; }
         [Range(0, 9999)]
         public int Qty { get; set; }
+        public Discrepancy Discrepancy { get; set; }
+        public Part Part { get; set; }
     }
 }

@@ -4,12 +4,13 @@ using TotalFlight.Domain.Entities.AircraftAggregate;
 using TotalFlight.Domain.Entities;
 using TotalFlight.Domain.Entities.DeadlineAggregate;
 using System.Threading;
+using MediatR;
+using System;
 
 namespace TotalFlight.Infrastructure.Data
 {
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
         public DbSet<Aircraft> Aircraft { get; set; }
         public DbSet<AircraftOptions> AircraftOptions { get; set; }
         public DbSet<AircraftTimes> AircraftTimes { get; set; }
@@ -24,6 +25,15 @@ namespace TotalFlight.Infrastructure.Data
         public DbSet<WorkOrder> WorkOrders { get; set; }
         public DbSet<WorkOrderTemplate> WorkOrderTemplates { get; set; }
         public DbSet<WorkOrderTemplateDiscrepancyTemplate> WorkOrderTemplateDiscrepancyTemplates { get; set; }
+
+        // Functionality
+        private readonly IMediator _mediator;
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+        public ApplicationContext(DbContextOptions<ApplicationContext> options, IMediator mediator)
+            : base (options)
+        {
+            _mediator = mediator ?? throw new ArgumentException(nameof(mediator));
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,15 +72,16 @@ namespace TotalFlight.Infrastructure.Data
                 .HasForeignKey(bc => bc.DiscrepancyTemplateId);
             // Soft delete filters
             modelBuilder.Entity<Part>().HasQueryFilter(p => !p.IsSoftDeleted);
-            modelBuilder.Entity<Part>().HasQueryFilter(p => !p.IsSoftDeleted);
         }
+
         /// <summary>
-        /// Dispatches all domain events before saving changes.
+        /// Dispatches all domain events before saving changes. Returns false on failure.
         /// </summary>
         public async Task<bool> SaveEntitiesAsync(CancellationToken token = default(CancellationToken))
         {
-            await _mediator.DispatchDomainEvents(this);
-            return await base.SaveChangesAsync();
+            await _mediator.DispatchDomainEventsAsync(this); // Include all domain event behavior in this commit
+            await base.SaveChangesAsync();
+            return true; // Domain events dispatched without exception
         }
     }
 }

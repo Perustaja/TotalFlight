@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TotalFlight.Domain.SharedKernel;
 
@@ -25,5 +26,8 @@ namespace TotalFlight.Domain.Entities
         public string ImagePath { get; set; }
         public string ImageThumbPath { get; set; }
         public bool IsSoftDeleted { get; set; }
+        // Required for join tables
+        public List<DiscrepancyPart> DiscrepancyParts { get; set; }
+        public List<DiscrepancyTemplatePart> DiscrepancyTemplateParts { get; set; }
     }
 }

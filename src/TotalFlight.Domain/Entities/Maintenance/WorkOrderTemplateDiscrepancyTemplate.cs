@@ -9,5 +9,7 @@ namespace TotalFlight.Domain.Entities
     {
         public Guid WorkOrderTemplateId { get; set; }
         public Guid DiscrepancyTemplateId { get; set; }
+        public WorkOrderTemplate WorkOrderTemplate { get; set; }
+        public DiscrepancyTemplate DiscrepancyTemplate { get; set; }
     }
 }

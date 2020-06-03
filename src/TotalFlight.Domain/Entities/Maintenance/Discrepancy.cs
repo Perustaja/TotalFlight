@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TotalFlight.Domain.SharedKernel;
 
@@ -19,5 +20,7 @@ namespace TotalFlight.Domain.Entities
         public string CreatedBy { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateFinalized { get; set; }
+        // Required for join table
+        public List<DiscrepancyPart> DiscrepancyParts { get; set; }
     }
 }
