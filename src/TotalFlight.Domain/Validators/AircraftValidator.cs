@@ -22,8 +22,8 @@ namespace TotalFlight.Domain.Validators
         /// </summary>
         private static void ValidateOptionalTimes(this Aircraft ac)
         {
-            var times = ac.AircraftTimes;
-            var opts = ac.AircraftOptions;
+            var times = ac.Times;
+            var opts = ac.Options;
 
             var src = String.Empty;
             if ((opts.TracksAirtime && !times.AirtimeCurrent.HasValue) 
@@ -46,8 +46,8 @@ namespace TotalFlight.Domain.Validators
         /// </summary>
         private static void ValidateTwinTimes(this Aircraft ac)
         {
-            var opts = ac.AircraftOptions;
-            var times = ac.AircraftTimes;
+            var opts = ac.Options;
+            var times = ac.Times;
 
             var src = String.Empty;
             if (opts.IsTwin) {
@@ -66,8 +66,8 @@ namespace TotalFlight.Domain.Validators
         /// </summary>
         private static void ValidateAircraftTotalTarget(this Aircraft ac)
         {
-            var opts = ac.AircraftOptions;
-            var times = ac.AircraftTimes;
+            var opts = ac.Options;
+            var times = ac.Times;
 
             if (!opts.ValidAircraftTotalTgts().Contains(times.AircraftTotalTgt))
                 throw new InvalidTargetException(ac.Id, times.AircraftTotalTgt);

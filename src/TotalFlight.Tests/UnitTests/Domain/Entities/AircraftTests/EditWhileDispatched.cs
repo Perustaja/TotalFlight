@@ -32,7 +32,7 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
 
             var newTimes = new AircraftTimes(0m, 0m, 0m, 0m, 0m, 0m, 0m, 0, AircraftTotalTarget.Engine1Current);
 
-            Assert.Throws<EditWhileDispatchedException>(() => ac.SetConfiguration(newTimes, ac.AircraftOptions));
+            Assert.Throws<EditWhileDispatchedException>(() => ac.SetConfiguration(newTimes, ac.Options));
         }
     }
 }

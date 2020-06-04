@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TotalFlight.Domain.Entities.DeadlineAggregate;
 using TotalFlight.Domain.Events;
 using TotalFlight.Domain.Exceptions.Aircraft;
 using TotalFlight.Domain.SharedKernel;
@@ -7,6 +9,9 @@ using TotalFlight.Domain.Validators;
 
 namespace TotalFlight.Domain.Entities.AircraftAggregate
 {
+    /// <summary>
+    /// Contains 
+    /// </summary>
     public class Aircraft : Entity
     {
         [StringLength(50)]
@@ -16,36 +21,52 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public int Year { get; private set; }
         [Range(0, 1000)]
         public int Places { get; private set; }
+        public string SerialNum { get; private set; }
+        public string EngModel { get; private set; } // NOTE: If twin, both should always be the same model
+        public string PropModel { get; private set; } // NOTE: If twin, both should always be the same model
+        public string Eng1SerialNum { get; private set; }
+        public string Eng2SerialNum { get; private set; }
+        public string Prop1SerialNum { get; private set; }
+        public string Prop2SerialNum { get; private set; }
         public bool IsGrounded { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsDispatched { get; set; }
         public bool IsSoftDeleted { get; private set; }
         public string ImagePath { get; private set; }
         public string ImageThumbPath { get; private set; }
-        public AircraftTimes AircraftTimes { get; private set; }
-        public AircraftOptions AircraftOptions { get; private set; }
+        public AircraftTimes Times { get; private set; } // Named for ease of use along with Options
+        public AircraftOptions Options { get; private set; }
         protected Aircraft() { } // Required by EF Core
         public Aircraft(string id, string model, int year, int places, AircraftTimes times,
         AircraftOptions opts)
         {
             Id = id;
-            Model = model;
-            Year = year;
-            Places = places;
+            SetRequiredDetails(model, year, places);
             IsGrounded = false;
             IsSoftDeleted = false;
             IsActive = false;
             opts.SetId(id);
             times.SetId(id);
-            AircraftOptions = opts;
-            AircraftTimes = times;
+            Options = opts;
+            Times = times;
             this.Validate();
         }
-        public void SetDetails(string model, int year, int places)
+        public void SetRequiredDetails(string model, int year, int places)
         {
             Model = model;
             Year = year;
             Places = places;
+        }
+        public void SetOptionalDetails(string serNum, string engMod, string propMod, string eng1SerNum,
+        string eng2SerNum, string prop1SerNum, string prop2SerNum)
+        {
+            SerialNum = serNum;
+            EngModel = engMod;
+            PropModel = propMod;
+            Eng1SerialNum = eng1SerNum;
+            Eng2SerialNum = eng2SerNum;
+            Prop1SerialNum = prop1SerNum;
+            Prop2SerialNum = prop2SerNum;
         }
         public void SoftDelete()
         {
@@ -74,10 +95,10 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         {
             if (IsDispatched)
                 throw new EditWhileDispatchedException(Id, nameof(SetConfiguration));
-            AircraftOptions = opts;
-            AircraftTimes = times;
+            Options = opts;
+            Times = times;
             this.Validate();
-            DomainEvents.Add(new AircraftTimesChangedDomainEvent(AircraftTimes));
+            DomainEvents.Add(new AircraftTimesChangedDomainEvent(Times));
         }
         /// <summary>
         /// Updates times, propogating changes. The positive difference between the old and 
@@ -87,12 +108,12 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public void UpdateTimes(decimal eng1Curr, decimal? eng2Curr, decimal? elecHobbs, 
         decimal? airtimeCurr, int? cycles)
         {
-            AircraftTimes.UpdateTimes(eng1Curr, eng2Curr, elecHobbs, airtimeCurr, cycles);
-            if (AircraftOptions.IsTwin) {
-                AircraftTimes.UpdateTwinTimes(eng2Curr.Value);
+            Times.UpdateTimes(eng1Curr, eng2Curr, elecHobbs, airtimeCurr, cycles);
+            if (Options.IsTwin) {
+                Times.UpdateTwinTimes(eng2Curr.Value);
             }
             this.Validate();
-            DomainEvents.Add(new AircraftTimesChangedDomainEvent(AircraftTimes));
+            DomainEvents.Add(new AircraftTimesChangedDomainEvent(Times));
         }
     }
 }

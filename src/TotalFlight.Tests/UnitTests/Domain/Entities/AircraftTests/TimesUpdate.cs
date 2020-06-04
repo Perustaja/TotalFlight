@@ -17,7 +17,7 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
             var ac = AircraftBuilder.ZeroTimeTwin(AircraftTotalTarget.Airtime);
             ac.UpdateTimes(0m, 0m, 0m, 100m, 1);
 
-            Assert.True(ac.AircraftTimes.AircraftTotal == 100m);
+            Assert.True(ac.Times.AircraftTotal == 100m);
         }
         [Fact]
         public void Increments_AircraftTotalTime_ElecHobbs()
@@ -25,7 +25,7 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
             var ac = AircraftBuilder.ZeroTimeTwin(AircraftTotalTarget.ElecHobbs);
             ac.UpdateTimes(0m, 0m, 100m, 0m, 1);
 
-            Assert.True(ac.AircraftTimes.AircraftTotal == 100m);
+            Assert.True(ac.Times.AircraftTotal == 100m);
         }
         [Fact]
         public void Increments_AircraftTotalTime_Engine1()
@@ -33,7 +33,7 @@ namespace TotalFlight.Tests.UnitTests.Domain.Entities.AircraftTests
             var ac = AircraftBuilder.ZeroTimeTwin(AircraftTotalTarget.Engine1Current);
             ac.UpdateTimes(100m, 0m, 0m, 0m, 1);
 
-            Assert.True(ac.AircraftTimes.AircraftTotal == 100m);
+            Assert.True(ac.Times.AircraftTotal == 100m);
         }
         /// <summary>
         /// Ensures that passing in a lesser time when updating an aircraft's time throws an exception.

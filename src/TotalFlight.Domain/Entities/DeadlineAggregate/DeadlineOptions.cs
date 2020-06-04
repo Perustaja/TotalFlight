@@ -20,7 +20,6 @@ namespace TotalFlight.Domain.Entities.DeadlineAggregate
         public decimal WarningTgtThresh { get; private set; }
         [Range(0, 300)]
         public int WarningDateThreshInDays { get; private set; }
-        public Deadline Deadline { get; private set; }
         protected DeadlineOptions() { } // Required by EF Core
         public DeadlineOptions(bool tracksTgt, bool tracksDate, bool isRecurr, DeadlineTarget tgt, 
         decimal warningTgtThres = 10, int warningDateThreshInDays = 10)
