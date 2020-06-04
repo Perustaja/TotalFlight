@@ -1,5 +1,5 @@
-using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TotalFlight.Domain.Enums;
 using TotalFlight.Domain.Exceptions.Aircraft;
 using TotalFlight.Domain.SharedKernel;
@@ -8,6 +8,8 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
 {
     public class AircraftTimes : Entity
     {
+        [Key]
+        [ForeignKey(nameof(Aircraft))]
         public string AircraftId { get; private set; }
         public decimal? ElectricalHobbs { get; private set; }
         public decimal Engine1Current { get; private set; }
@@ -21,6 +23,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public decimal? AirtimeCurrent { get; private set; }
         public decimal? AirtimeTotal { get; private set; }
         public AircraftTotalTarget AircraftTotalTgt { get; private set; }
+        protected AircraftTimes() { } // Required by EF Core
         /// <summary>
         /// Creates an initial single-engine or simulator time record. Use SetTwinTimes afterwards
         /// if creating a twin aircraft.

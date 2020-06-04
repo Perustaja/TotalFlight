@@ -63,6 +63,7 @@ namespace TotalFlight.Domain.Entities.DeadlineAggregate
         }
         [NotMapped]
         private bool IsOneTimeAndCompl => (!DeadlineOptions.IsRecurring && (DateLastCompl.HasValue || TargetLastCompl.HasValue));
+        protected Deadline() { } // Required by EF Core
         public Deadline(string aircraftId, string title, decimal? tgtLast, decimal? tgtInit,
         decimal? tgtInt, DateTime? dateLast, DateTime? dateInit, int? dateInt, DeadlineOptions opts)
         {

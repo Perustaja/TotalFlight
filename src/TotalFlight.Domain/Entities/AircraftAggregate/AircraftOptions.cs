@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TotalFlight.Domain.Enums;
 using TotalFlight.Domain.SharedKernel;
 
@@ -11,6 +12,9 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
     /// </summary>
     public class AircraftOptions : Entity
     {
+        [Key]
+        [ForeignKey(nameof(Aircraft))]
+        public string AircraftId { get; private set; }
         public bool HasElecHobbs { get; private set; }
         public bool TracksAirtime { get; private set; }
         public bool TracksCycles { get; private set; }
@@ -18,6 +22,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public bool IsTwin { get; private set; }
         public bool IsSimulator { get; private set; }
         public bool IsGrounded { get; private set; }
+        protected AircraftOptions() { } // Required by EF Core
         /// <summary>
         /// Creates a new instance to be passed to Aircraft's ctor.
         /// </summary>
@@ -38,6 +43,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
                 IsSimulator = false;
             }
         }
+        public void SetId(string id) => AircraftId = id;
         /// <summary>
         /// Returns the valid targets that aircraft total time may track based on current options.
         /// </summary>

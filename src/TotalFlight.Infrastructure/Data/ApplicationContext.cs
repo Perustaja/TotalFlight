@@ -6,6 +6,7 @@ using TotalFlight.Domain.Entities.DeadlineAggregate;
 using System.Threading;
 using MediatR;
 using System;
+using TotalFlight.Infrastructure.EntityConfigs;
 
 namespace TotalFlight.Infrastructure.Data
 {
@@ -37,39 +38,10 @@ namespace TotalFlight.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Many-to-many relationship between Discrepancy and Part
-            modelBuilder.Entity<DiscrepancyPart>()
-                .HasKey(bc => new { bc.DiscrepancyId, bc.PartId });
-            modelBuilder.Entity<DiscrepancyPart>()
-                .HasOne(bc => bc.Discrepancy)
-                .WithMany(b => b.DiscrepancyParts)
-                .HasForeignKey(bc => bc.DiscrepancyId);
-            modelBuilder.Entity<DiscrepancyPart>()
-                .HasOne(bc => bc.Part)
-                .WithMany(c => c.DiscrepancyParts)
-                .HasForeignKey(bc => bc.PartId);
-            // Many-to-many relationship between DiscrepancyTemplate and Part
-            modelBuilder.Entity<DiscrepancyTemplatePart>()
-                .HasKey(bc => new { bc.DiscrepancyTemplateId, bc.PartId });
-            modelBuilder.Entity<DiscrepancyTemplatePart>()
-                .HasOne(bc => bc.DiscrepancyTemplate)
-                .WithMany(b => b.DiscrepancyTemplateParts)
-                .HasForeignKey(bc => bc.DiscrepancyTemplateId);
-            modelBuilder.Entity<DiscrepancyTemplatePart>()
-                .HasOne(bc => bc.Part)
-                .WithMany(c => c.DiscrepancyTemplateParts)
-                .HasForeignKey(bc => bc.PartId);
-            // Many-to-many relationship between WorkOrderTemplate and DiscrepancyTemplate
-            modelBuilder.Entity<WorkOrderTemplateDiscrepancyTemplate>()
-                .HasKey(bc => new { bc.WorkOrderTemplateId, bc.DiscrepancyTemplateId });
-            modelBuilder.Entity<WorkOrderTemplateDiscrepancyTemplate>()
-                .HasOne(bc => bc.WorkOrderTemplate)
-                .WithMany(b => b.WorkOrderTemplateDiscrepancyTemplates)
-                .HasForeignKey(bc => bc.WorkOrderTemplateId);
-            modelBuilder.Entity<WorkOrderTemplateDiscrepancyTemplate>()
-                .HasOne(bc => bc.DiscrepancyTemplate)
-                .WithMany(c => c.WorkOrderTemplateDiscrepancyTemplates)
-                .HasForeignKey(bc => bc.DiscrepancyTemplateId);
+            // Configure join tables
+            modelBuilder.ApplyConfiguration(new DiscrepancyPartEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new DiscrepancyTemplatePartEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkOrderTemplateDiscrepancyTemplateEntityTypeConfiguration());
             // Soft delete filters
             modelBuilder.Entity<Part>().HasQueryFilter(p => !p.IsSoftDeleted);
         }

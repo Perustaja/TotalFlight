@@ -24,6 +24,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         public string ImageThumbPath { get; private set; }
         public AircraftTimes AircraftTimes { get; private set; }
         public AircraftOptions AircraftOptions { get; private set; }
+        protected Aircraft() { } // Required by EF Core
         public Aircraft(string id, string model, int year, int places, AircraftTimes times,
         AircraftOptions opts)
         {
@@ -34,6 +35,7 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
             IsGrounded = false;
             IsSoftDeleted = false;
             IsActive = false;
+            opts.SetId(id);
             times.SetId(id);
             AircraftOptions = opts;
             AircraftTimes = times;
