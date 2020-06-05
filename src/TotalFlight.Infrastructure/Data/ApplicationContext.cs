@@ -7,10 +7,12 @@ using System.Threading;
 using MediatR;
 using System;
 using TotalFlight.Infrastructure.EntityConfigs;
+using TotalFlight.Infrastructure.Interfaces;
+using TotalFlight.Infrastructure.Tenancy;
 
 namespace TotalFlight.Infrastructure.Data
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : DbContext, IMultiTenantDbContext
     {
         public DbSet<Aircraft> Aircraft { get; set; }
         public DbSet<AircraftOptions> AircraftOptions { get; set; }
@@ -29,13 +31,22 @@ namespace TotalFlight.Infrastructure.Data
 
         // Functionality
         private readonly IMediator _mediator;
+        private readonly Tenant _tenant;
+        public Guid TenantId => _tenant.Id;
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
-        public ApplicationContext(DbContextOptions<ApplicationContext> options, IMediator mediator)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options, ITenantHook tenantHook,
+        IMediator mediator)
             : base (options)
         {
+            _tenant = tenantHook.GetTenant() ?? throw new NullReferenceException(nameof(_tenant));
             _mediator = mediator ?? throw new ArgumentException(nameof(mediator));
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        {
+            // Dynamically connect via the tenant's connection string
+            builder.UseMySql(_tenant.ConnectionString);
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure join tables

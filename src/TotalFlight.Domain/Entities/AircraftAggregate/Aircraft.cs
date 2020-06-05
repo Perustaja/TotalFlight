@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TotalFlight.Domain.Entities.DeadlineAggregate;
 using TotalFlight.Domain.Events;
 using TotalFlight.Domain.Exceptions.Aircraft;
 using TotalFlight.Domain.SharedKernel;
@@ -10,7 +7,7 @@ using TotalFlight.Domain.Validators;
 namespace TotalFlight.Domain.Entities.AircraftAggregate
 {
     /// <summary>
-    /// Contains 
+    /// Contains stateful information and information used solely for maintenance logs (models, serial nums).
     /// </summary>
     public class Aircraft : Entity
     {
@@ -22,15 +19,17 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
         [Range(0, 1000)]
         public int Places { get; private set; }
         public string SerialNum { get; private set; }
-        public string EngModel { get; private set; } // NOTE: If twin, both should always be the same model
-        public string PropModel { get; private set; } // NOTE: If twin, both should always be the same model
+        public string Eng1Model { get; private set; } 
+        public string Eng2Model { get; private set; } 
+        public string Prop1Model { get; private set; } 
+        public string Prop2Model { get; private set; } 
         public string Eng1SerialNum { get; private set; }
         public string Eng2SerialNum { get; private set; }
         public string Prop1SerialNum { get; private set; }
         public string Prop2SerialNum { get; private set; }
         public bool IsGrounded { get; private set; }
         public bool IsActive { get; private set; }
-        public bool IsDispatched { get; set; }
+        public bool IsDispatched { get; private set; }
         public bool IsSoftDeleted { get; private set; }
         public string ImagePath { get; private set; }
         public string ImageThumbPath { get; private set; }
@@ -57,12 +56,14 @@ namespace TotalFlight.Domain.Entities.AircraftAggregate
             Year = year;
             Places = places;
         }
-        public void SetOptionalDetails(string serNum, string engMod, string propMod, string eng1SerNum,
-        string eng2SerNum, string prop1SerNum, string prop2SerNum)
+        public void SetOptionalDetails(string serNum, string eng1Mod, string eng2Mod, string prop1Mod, 
+        string prop2Mod, string eng1SerNum, string eng2SerNum, string prop1SerNum, string prop2SerNum)
         {
             SerialNum = serNum;
-            EngModel = engMod;
-            PropModel = propMod;
+            Eng1Model = eng1Mod;
+            Eng2Model = eng2Mod;
+            Prop1Model = prop1Mod;
+            Prop2Model = prop2Mod;
             Eng1SerialNum = eng1SerNum;
             Eng2SerialNum = eng2SerNum;
             Prop1SerialNum = prop1SerNum;
